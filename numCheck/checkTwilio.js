@@ -20,7 +20,7 @@ function checkNumberTwilio(event, callback) {
   client.lookups.v1.phoneNumbers(eventData.number)
     .fetch({ type: 'carrier' })
     .then((data) => {
-      console.log('NUMBER_DETAILS_LOOKED_UP');
+      console.log('NEW_NUMBER_DETAILS_LOOKED_UP');
       console.log(`NUMBER=${eventData.number}`);
       console.log(`NUMBER_TYPE=${data.carrier.type}`);
       const response = {
