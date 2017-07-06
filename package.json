@@ -1,5 +1,16 @@
 {
+  "name": "anon-texts-num-check-lambda",
+  "description": "Lambda to check if provided ph# is a valid mobile phone number & record it as so",
+  "version": "0.1.0",
+  "devDependencies": {},
   "dependencies": {
     "twilio": "^3.4.0"
-  }
+  },
+  "scripts": {
+    "test:twilio": "sls invoke -f checkTwilio -p event.json",
+    "test:local": "sls invoke local -f sendMessage -p event.json",
+    "logs:twilio": "sls logs -f checkTwilio"
+  },
+  "author": "Ross Dyson",
+  "license": "MIT"
 }
