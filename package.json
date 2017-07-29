@@ -5,12 +5,14 @@
   "devDependencies": {},
   "dependencies": {
     "aws-sdk": "^2.81.0",
+    "lodash": "^4.17.4",
     "twilio": "^3.4.0"
   },
   "scripts": {
-    "test:twilio": "sls invoke -f checkTwilio -p event.json",
-    "test:local": "sls invoke local -f sendMessage -p event.json",
-    "logs:twilio": "sls logs -f checkTwilio"
+    "test:twilio": "sls invoke -f checkNumber -p event.json",
+    "test:local:mobile": "sls invoke local -f checkNumber -p mobileTest.json",
+    "test:local:landline": "sls invoke local -f checkNumber -p landlineTest.json",
+    "logs:twilio": "sls logs -f checkNumber"
   },
   "author": "Ross Dyson",
   "license": "MIT"

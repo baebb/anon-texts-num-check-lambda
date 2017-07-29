@@ -17,8 +17,8 @@ provider:
       TWILIO_AUTH_TOKEN: ${self:custom.secrets.TWILIO_AUTH_TOKEN}
 
 functions:
-  checkTwilio:
-    handler: numCheck/checkTwilio.checkTwilio
+  checkNumber:
+    handler: handler.checkNumber
     events:
       - http:
           path: checkTwi
