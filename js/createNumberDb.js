@@ -17,13 +17,10 @@ module.exports = (number, type) => {
     dynamoDB.put(params, (error) => {
       // handle potential errors
       if (error) {
-        console.log(`PUT_ERROR: ${error.code}`);
-        console.log(`PUT_ERROR_MESSAGE: ${error.message}`);
+        console.log(`PUT_ERROR: ${error.code} ${error.message}`);
         reject(error)
       } else {
-        console.log('NEW_NUMBER_RECORDED');
-        console.log(`NUMBER: ${params.Item.number}`);
-        console.log(`TYPE: ${params.Item.type}`);
+        console.log(`NUMBER_RECORDED ${params.Item.number} ${params.Item.type}`);
         resolve()
       }
     })

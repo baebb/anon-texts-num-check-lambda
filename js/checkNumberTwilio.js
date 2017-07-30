@@ -8,15 +8,12 @@ module.exports = (number) => {
     client.lookups.v1.phoneNumbers(number)
       .fetch({ type: 'carrier' })
       .then((data) => {
-        console.log('NEW_NUMBER_DETAILS_LOOKED_UP');
-        console.log(`NUMBER: ${number}`);
-        console.log(`NUMBER_TYPE: ${data.carrier.type}`);
+        console.log(`NUMBER_LOOKED_UP ${number} ${data.carrier.type}`);
         resolve(data.carrier.type);
       })
       .catch((error) => {
         //error
-        console.log(`TWILIO_ERROR: ${error.status}`);
-        console.log(`TWILIO_ERROR_MSG: ${error.message}`);
+        console.log(`TWILIO_ERROR: ${error.status} ${error.message}`);
         reject(error);
       });
   });
