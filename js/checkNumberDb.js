@@ -8,7 +8,7 @@ module.exports = (number) => {
   // console.log('event: ',event);
   return new Promise((resolve, reject) => {
     const params = {
-      TableName: 'isMobile',
+      TableName: 'ATnumberType',
       Key: {
         number: Number(number)
       },
@@ -21,13 +21,15 @@ module.exports = (number) => {
         console.log(`GET_ERROR_MESSAGE: ${error.message}`);
         reject(error);
       } else {
-        console.log('GOT_NUMBER_DETAILS');
-        console.log(`NUMBER: ${params.Key.number}`);
-        //no number type recorded yet
+        // found number type
         if (_.has(result, 'Item.type')) {
+          console.log('GOT_NUMBER_TYPE');
+          console.log(`NUMBER: ${params.Key.number}`);
           console.log(`TYPE: ${result.Item.type}`);
           resolve(result.Item.type);
-        } else {
+        }
+        // no number type recorded yet
+        else {
           console.log('NUMBER_TYPE_UNDEFINED');
           resolve(result.Item);
         }

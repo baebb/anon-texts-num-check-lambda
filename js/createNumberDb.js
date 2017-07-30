@@ -7,7 +7,7 @@ module.exports = (number, type) => {
   // console.log('event: ',event);
   return new Promise((resolve, reject) => {
     const params = {
-      TableName: 'isMobile',
+      TableName: 'ATnumberType',
       Item: {
         number: Number(number),
         type: type
@@ -21,7 +21,7 @@ module.exports = (number, type) => {
         console.log(`PUT_ERROR_MESSAGE: ${error.message}`);
         reject(error)
       } else {
-        console.log('NEW_NUMBER_ADDED');
+        console.log('NEW_NUMBER_RECORDED');
         console.log(`NUMBER: ${params.Item.number}`);
         console.log(`TYPE: ${params.Item.type}`);
         resolve()

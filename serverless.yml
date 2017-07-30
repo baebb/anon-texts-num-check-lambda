@@ -19,9 +19,10 @@ provider:
 functions:
   checkNumber:
     handler: handler.checkNumber
+    memorySize: 128
     events:
       - http:
-          path: checkTwi
+          path: checknum
           method: post
           cors: true
           integration: lambda-proxy
