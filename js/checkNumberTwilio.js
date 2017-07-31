@@ -12,9 +12,14 @@ module.exports = (number) => {
         resolve(data.carrier.type);
       })
       .catch((error) => {
-        //error
-        console.log(`TWILIO_ERROR: ${error.status} ${error.message}`);
-        reject(error);
+        // there is no such number
+        if (error.status === 404) {
+          resolve('not_a_number');
+        } else {
+          // actual error
+          console.log(`TWILIO_ERROR: ${error.status} ${error.message}`);
+          reject(error);
+        }
       });
   });
 };
