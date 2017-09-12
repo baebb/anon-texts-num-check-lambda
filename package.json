@@ -9,11 +9,13 @@
     "twilio": "^3.4.0"
   },
   "scripts": {
-    "test:dev:mobile": "sls invoke -f checkNumber -p mobileTest.json",
-    "test:dev:landline": "sls invoke -f checkNumber -p landlineTest.json",
-    "test:local:mobile": "sls invoke local -f checkNumber -p mobileTest.json",
-    "test:local:landline": "sls invoke local -f checkNumber -p landlineTest.json",
-    "logs:dev": "sls logs -f checkNumber"
+    "test:mobile_US": "sls invoke -f checkNumber -p mobileTest.json",
+    "test:mobile_AU": "sls invoke -f checkNumber -p AUmobileTest.json",
+    "test:landline": "sls invoke -f checkNumber -p landlineTest.json",
+    "test:local_mobile_US": "sls invoke local -f checkNumber -p mobileTest.json",
+    "test:local_mobile_AU": "sls invoke local -f checkNumber -p AUmobileTest.json",
+    "test:local_landline": "sls invoke local -f checkNumber -p landlineTest.json",
+    "logs": "sls logs -f checkNumber"
   },
   "author": "Ross Dyson",
   "license": "MIT"

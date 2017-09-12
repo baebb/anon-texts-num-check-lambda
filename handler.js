@@ -15,40 +15,83 @@ module.exports.checkNumber = (event, context, callback) => {
 };
 
 function checkNumber(eventData, callback) {
-  console.log(`NEW_NUMBER_CHECK ${eventData.number}`);
+  const numberToCheck = eventData.number;
+  console.log(`NEW_NUMBER_CHECK ${numberToCheck}`);
   let response = {
     headers: {
       'Access-Control-Allow-Origin': '*',
     }
   };
   // Check if the number provided is actually a number . . .
-  if (isNaN(eventData.number)) {
-    console.log(`NOT_A_NUMBER ${eventData.number}`);
+  if (isNaN(numberToCheck) || numberToCheck.length !== 10) {
+    console.log(`NOT_A_NUMBER ${numberToCheck}`);
     response.statusCode = 200;
-    response.body = JSON.stringify({ number: eventData.number, type: 'not_a_number' });
+    response.body = JSON.stringify({ number: numberToCheck, type: 'not_a_number' });
     callback(null, response);
   }
-  // Check DB if number already exists
+  else if (numberToCheck.substr(0, 2) === '04') {
+    console.log(`PROBS_AUSTRALIAN_MOBILE ${numberToCheck}`);
+    const auFormattedNumber = `+61${numberToCheck}`;
+    // Check DB if number already exists
+    checkNumberDb(auFormattedNumber)
+      .then((res) => {
+        if (res === undefined) {
+          console.log(`RECORDING_NUMBER ${numberToCheck}`);
+          createNumberDb(numberToCheck, 'mobile', 'AU')
+            .then(() => {
+              // console.log('recoding datas and ending request');
+              response.statusCode = 200;
+              response.body = JSON.stringify({ number: numberToCheck, type: 'mobile' });
+              callback(null, response);
+            })
+            .catch((err) => {
+              // console.log('DB fucked up because:', err);
+              console.log(`RECORDING_NUMBER_ERROR ${numberToCheck} ${err}`);
+              response.statusCode = 500;
+              response.body = JSON.stringify(err);
+              callback(null, response);
+            })
+        }
+        // DB has record
+        else {
+          console.log(`NUMBER_RECORD_LOOKED_UP ${numberToCheck} ${res}`);
+          response.statusCode = 200;
+          response.body = JSON.stringify({ number: numberToCheck, type: res });
+          callback(null, response);
+        }
+      })
+      .catch((err) => {
+        console.log(`RECORD_LOOKUP_ERROR ${numberToCheck} ${err}`);
+        response.statusCode = 500;
+        response.body = JSON.stringify(err);
+        callback(null, response);
+      })
+  }
   else {
-    checkNumberDb(eventData.number)
+    const usFormattedNumber = `+1${numberToCheck}`;
+    // Check DB if number already exists
+    checkNumberDb(usFormattedNumber)
       .then((res) => {
         // DB got no record so we gotta check with Twilio
         if (res === undefined) {
-          console.log(`LOOKING_UP_NUMBER ${eventData.number}`);
-          checkNumberTwilio(eventData.number)
+          console.log(`TWILIO_LOOKING_UP_NUMBER ${numberToCheck}`);
+          const formattedNumber = `+1${numberToCheck}`;
+          checkNumberTwilio(formattedNumber)
             .then((res) => {
               // console.log('twilio checked and found it was a', res);
               // Got number type and recording it
-              console.log(`RECORDING_NUMBER ${eventData.number} ${res}`);
-              createNumberDb(eventData.number, res)
+              console.log(`TWILIO_NUMBER_LOOKED_UP ${numberToCheck} ${res}`);
+              createNumberDb(numberToCheck, res, 'US')
                 .then(() => {
                   // console.log('recoding datas and ending request');
+                  console.log(`RECORDING_NUMBER ${numberToCheck}`);
                   response.statusCode = 200;
-                  response.body = JSON.stringify({ number: eventData.number, type: res });
+                  response.body = JSON.stringify({ number: numberToCheck, type: res });
                   callback(null, response);
                 })
                 .catch((err) => {
                   // console.log('DB fucked up because:', err);
+                  console.log(`RECORDING_NUMBER_ERROR ${numberToCheck} ${err}`);
                   response.statusCode = 500;
                   response.body = JSON.stringify(err);
                   callback(null, response);
@@ -56,28 +99,22 @@ function checkNumber(eventData, callback) {
             })
             .catch((err) => {
               // console.log('twilio erred because:', err);
+              console.log(`TWILIO_LOOKUP_ERROR ${numberToCheck} ${err}`);
               response.statusCode = 500;
               response.body = JSON.stringify(err);
               callback(null, response);
             })
         }
-        // DB has record, says it's good
-        else if (res === 'mobile') {
-          // console.log('is mobile, done');
-          response.statusCode = 200;
-          response.body = JSON.stringify({ number: eventData.number, type: res });
-          callback(null, response);
-        }
-        // DB has record, says it's bad
+        // DB has record
         else {
-          // console.log('not a mobile, fuck off');
+          console.log(`NUMBER_RECORD_LOOKED_UP ${numberToCheck}`);
           response.statusCode = 200;
-          response.body = JSON.stringify({ number: eventData.number, type: res });
+          response.body = JSON.stringify({ number: numberToCheck, type: res });
           callback(null, response);
         }
       })
       .catch((err) => {
-        // console.log('erred on checkdb', err);
+        console.log(`RECORD_LOOKUP_ERROR ${numberToCheck} ${err}`);
         response.statusCode = 500;
         response.body = JSON.stringify(err);
         callback(null, response);

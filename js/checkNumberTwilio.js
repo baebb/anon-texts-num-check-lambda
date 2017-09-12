@@ -8,7 +8,6 @@ module.exports = (number) => {
     client.lookups.v1.phoneNumbers(number)
       .fetch({ type: 'carrier' })
       .then((data) => {
-        console.log(`NUMBER_LOOKED_UP ${number} ${data.carrier.type}`);
         resolve(data.carrier.type);
       })
       .catch((error) => {
@@ -17,7 +16,6 @@ module.exports = (number) => {
           resolve('not_a_number');
         } else {
           // actual error
-          console.log(`TWILIO_ERROR: ${error.status} ${error.message}`);
           reject(error);
         }
       });
