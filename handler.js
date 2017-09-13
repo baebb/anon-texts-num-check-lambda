@@ -75,8 +75,7 @@ function checkNumber(eventData, callback) {
         // DB got no record so we gotta check with Twilio
         if (res === undefined) {
           console.log(`TWILIO_LOOKING_UP_NUMBER ${numberToCheck}`);
-          const formattedNumber = `+1${numberToCheck}`;
-          checkNumberTwilio(formattedNumber)
+          checkNumberTwilio(usFormattedNumber)
             .then((res) => {
               // console.log('twilio checked and found it was a', res);
               // Got number type and recording it
