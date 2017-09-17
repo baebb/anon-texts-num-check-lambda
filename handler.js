@@ -41,7 +41,11 @@ function checkNumber(eventData, callback) {
             .then(() => {
               // console.log('recoding datas and ending request');
               response.statusCode = 200;
-              response.body = JSON.stringify({ number: numberToCheck, type: 'mobile' });
+              response.body = JSON.stringify({
+                number: numberToCheck,
+                type: 'mobile',
+                countryCode: 'AU'
+              });
               callback(null, response);
             })
             .catch((err) => {
@@ -56,7 +60,11 @@ function checkNumber(eventData, callback) {
         else {
           console.log(`NUMBER_RECORD_LOOKED_UP ${numberToCheck} ${res}`);
           response.statusCode = 200;
-          response.body = JSON.stringify({ number: numberToCheck, type: res });
+          response.body = JSON.stringify({
+            number: numberToCheck,
+            type: res.type,
+            countryCode: res.country
+          });
           callback(null, response);
         }
       })
@@ -85,7 +93,11 @@ function checkNumber(eventData, callback) {
                   // console.log('recoding datas and ending request');
                   console.log(`RECORDING_NUMBER ${numberToCheck}`);
                   response.statusCode = 200;
-                  response.body = JSON.stringify({ number: numberToCheck, type: res });
+                  response.body = JSON.stringify({
+                    number: numberToCheck,
+                    type: res,
+                    countryCode: 'US'
+                  });
                   callback(null, response);
                 })
                 .catch((err) => {
@@ -108,7 +120,11 @@ function checkNumber(eventData, callback) {
         else {
           console.log(`NUMBER_RECORD_LOOKED_UP ${numberToCheck}`);
           response.statusCode = 200;
-          response.body = JSON.stringify({ number: numberToCheck, type: res });
+          response.body = JSON.stringify({
+            number: numberToCheck,
+            type: res.type,
+            countryCode: res.country
+          });
           callback(null, response);
         }
       })

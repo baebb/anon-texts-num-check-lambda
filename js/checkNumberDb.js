@@ -21,7 +21,7 @@ module.exports = (number) => {
       } else {
         // found number type
         if (_.has(result, 'Item.type')) {
-          resolve(result.Item.type);
+          resolve(result.Item);
         }
         // no number type recorded yet
         else {
